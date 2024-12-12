@@ -72,6 +72,9 @@ Now, I just have to throw the text files into ggplot in R.
 
 #plots save in ./Homework4/outputs/figures
 ```
+![r6maxLD](https://github.com/jayalaanUCI/ee282/blob/Homework4/Homework4/output/figures/RmaxLD%20plot.png?raw=true)
+![r6minLD](https://github.com/jayalaanUCI/ee282/blob/Homework4/Homework4/output/figures/r6minLD%20plot.png?raw=true)
+
 ### GC plots
 ```
 # in Rstudio
@@ -95,6 +98,8 @@ r6mingc <- read.delim("C:/Users/julio/OneDrive/Desktop/class/r6mingc.txt", heade
 + )
 
 ```
+![r6max](https://github.com/jayalaanUCI/ee282/blob/Homework4/Homework4/output/figures/r6maxGC%20plot.png?raw=true)
+![r6minLD](https://github.com/jayalaanUCI/ee282/blob/Homework4/Homework4/output/figures/r6minGCplot.png?raw=true)
 ### Culmulative Sequence Plot
 Returning to bash
 ```
@@ -104,7 +109,9 @@ sort -rnk2,2 ~/myrepos/ee282/Homework4/data/processed/r6_min_summ.txt > data/pro
 plotCDF data/processed/maxsorted.txt output/figures/r6maxCDF.png
 plotCDF data/processed/minsorted.txt output/figures/r6minCDF.png
 ```
-cd..
+![R6macCDF](https://github.com/jayalaanUCI/ee282/blob/Homework4/Homework4/output/figures/r6maxCDF.png?raw=true)
+![r6minCDF](https://github.com/jayalaanUCI/ee282/blob/Homework4/Homework4/output/figures/r6minCDF.png?raw=true)
+
 # Genome Assembly
 
 In Homework4 directory, I asked for more cores to run. I then converted the hifiasm file to FASTA
@@ -150,11 +157,19 @@ cut -f 2 data/processed/r6.ctg.sorted.namesizes.txt > data/processed/r6.ctg.sort
 ```
 
 Now just use PlotCDF to produce the plots.
+
+
 ```
 plotCDF data/processed/r6.onlysortedContigs.txt output/figures/hifiasmCDF.png
 plotCDF data/processed/r6.ctg.sorted.sizes.txt output/figures/flybaseCDF.png
 plotCDF data/processed/r6.scaff.sorted.sizes.txt  output/figures/scaffCDF.png
 ```
+#### Hifiasm CDF
+![hifiasmCDF](https://github.com/jayalaanUCI/ee282/blob/Homework4/Homework4/output/figures/hifiasmCDF.png?raw=true)
+#### R6 Contig CDF
+![r6contigCDF](https://github.com/jayalaanUCI/ee282/blob/Homework4/Homework4/output/figures/flybaseCDF.png?raw=true)
+#### R6 Scaffold CDF
+![r6scaffoldCDF](https://github.com/jayalaanUCI/ee282/blob/Homework4/Homework4/output/figures/scaffCDF.png?raw=true)
 
 From this we see that the scaff data has a tighter distribution than the hifiasm or the flybase contigs. Hifiasm has a a bit of a peak as it begins to plateu.
 
@@ -181,3 +196,10 @@ busco -i data/processed/ISO_ctg.fasta -m genome -c 16 -l diptera_odb10 -o r6.hif
 
 Used Browser option for DGenie and downloaded fasta.gz files for the r6.contig and the r6.hifiasm datasets and ran them throught the aligner.
  Saved Map png and summary data.
+
+ ### Summary Figure R6 Contig vs Hifiasm
+
+![Summary](https://github.com/jayalaanUCI/ee282/blob/Homework4/Homework4/output/figures/summary_ISO_ctg_to_r6.ctg.png?raw=true "DGenie R6contig v. Hifi")
+
+### DGenie Map
+![Map](https://github.com/jayalaanUCI/ee282/blob/Homework4/Homework4/output/figures/map_ISO_ctg_to_r6.ctg.png?raw=true)
