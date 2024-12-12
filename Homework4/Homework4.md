@@ -38,9 +38,9 @@ These two command produce a list of sequences below 100kb and one above 100kb. I
 ```
 #in the same directory as above
 
-faSize ~/myrepos/ee282/data/processed/r6_max100kb.txt ~/myrepos/ee282/data/processed/r6_max_summ.text
+faSize -detailed ~/myrepos/ee282/data/processed/r6_max100kb.txt ~/myrepos/ee282/data/processed/r6_max_summ.text
 
-faSize ~/myrepos/ee282/data/processed/r6_min100kb.txt ~/myrepos/ee282/data/processed/r6_min_summ.text
+faSize -detailed ~/myrepos/ee282/data/processed/r6_min100kb.txt ~/myrepos/ee282/data/processed/r6_min_summ.text
 
 cat ~/myrepos/ee282/Homework4/data/processed/r6_max_sum.txt ~/myrepos/ee282/Homework4/data/processed/r6_min_sum.txt > ~/myrepos/ee282/Homework4/data/processed/r6SUM.text
 
@@ -98,8 +98,13 @@ r6mingc <- read.delim("C:/Users/julio/OneDrive/Desktop/class/r6mingc.txt", heade
 ### Culmulative Sequence Plot
 Returning to bash
 ```
+sort -rnk2,2 ~/myrepos/ee282/Homework4/data/processed/r6_max_summ.txt > data/processed/maxsorted.txt
+sort -rnk2,2 ~/myrepos/ee282/Homework4/data/processed/r6_min_summ.txt > data/processed/minsorted.txt
 
-
+plotCDF data/processed/maxsorted.txt output/figures/r6maxCDF.png
+plotCDF data/processed/minsorted.txt output/figures/r6minCDF.png
+```
+cd..
 # Genome Assembly
 
 In Homework4 directory, I asked for more cores to run. I then converted the hifiasm file to FASTA
