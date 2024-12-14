@@ -14,17 +14,17 @@ CD1a is one of 4 CD1 molecules in humans that allow the immune system to respond
 2. Vizualize spread of of insertion across the mouse genome using [IGV](https://igv.org/). 
 ## Methods and Results
 ### Sample Preparation and Targeted Locus Amplification
-DNA samples for sequencing where generated from CD1a mouse splenocytes, lymph nodes, and blood. Tissues were macerated and red blood cells were lysed with RBC lysis buffer. Mononuclear cells were then put through this [TLA protocol](https://link.springer.com/protocol/10.1007/978-1-4939-6442-0_13) for isolation of DNA. In short, cells were lysed in the presensence of paraformaldehyde to fix DNA to proximal transcription factors, enahncers, or aother regulatory proteins. Samples were then digested and subsequebtly ligated to link DNA sequences attached to the same regualtory elements. Proteins were digeted before ligating DNA once more to form circular DNA. CD1a-enriched amplicons were generated through PCR usign inverted genotying primers. DNA amplicons were purified via AMPure XP beads before beign sent for Nanopore Sequencing at [Plasmidsaur](https://plasmidsaurus.com/).
+DNA samples for sequencing where generated from CD1a mouse splenocytes, lymph nodes, and blood. Tissues were macerated and red blood cells were lysed with RBC lysis buffer. Mononuclear cells were then put through this [TLA protocol](https://link.springer.com/protocol/10.1007/978-1-4939-6442-0_13) for isolation of DNA. In short, cells were lysed in the presensence of paraformaldehyde to fix DNA to proximal transcription factors, enahncers, or another regulatory proteins. Samples were then digested and subsequebtly ligated to link DNA sequences attached to the same regualtory elements. Proteins were digeted before ligating DNA once more to form circular DNA. CD1a-enriched amplicons were generated through PCR usign inverted genotying primers. DNA amplicons were purified via AMPure XP beads before beign sent for Nanopore Sequencing at [Plasmidsaur](https://plasmidsaurus.com/).
 ### Required Packages and alnguages
 I will be using Mamba as a package manager through which most of these packages were downloaded.
 | Packacage/Utility |      Purpose      |
-| ----------------- | ----------------- |
-| Perl              |                   |
-| NanoQC            |   Quality checks  |
-| Minimap2          |   Alignement      |
-| Bioawk            | Data handling     |
-| R and ggplot2     |  Graphing         |
-| Fasize/Fafilter   | Seq reports and filtering |
+| ----------------- | ----------------- | 
+| Samtools       |    managing sam files               |   
+| NanoQC            |   Quality checks  |  
+| NanoPlot          |   Quality checks  |
+| Minimap2          |   Alignement      |   
+| Bioawk            | Data handling     |   
+| R and ggplot2     |  Graphing         |   
 | IGV (online)      | Alignment         |
 
 Data and output will be posted to [github](https://github.com/jayalaanUCI/ee282). 
@@ -36,13 +36,63 @@ Data and output will be posted to [github](https://github.com/jayalaanUCI/ee282)
 cd ~/myrepos/FinalProject/data/raw
 mv 7PCS4R_1_CD1a_TLA_amplicon_primer_3.fastq CD1aTLA.fastq | gzip 
 ```
-Next, my goal is to run NanoQC to out out quality check graphs specific to the nanopore platform and use faSize to get summary info of the reads.
+Next, my goal is to run NanoQC to out out quality check graphs specific to the nanopore platform.
 
 ```
-nanoqc -o output/figures/ data/raw/CD1aTLA.fasta.gzip
-
+nanoqc -o output/figures/ data/raw/CD1aTLA.fasta.gz
 
 ```
+![NanoQC plots](https://github.com/jayalaanUCI/ee282/blob/FinalProject/FinalProject/output/figures/newplot.png?raw=true)
+
+> Figure 2. NanoQC plots showing size and quality of reads.
+
+Based on the QC data, Average read length is ~400bp  with several long reads and extremly long reads. 
+
+Next is the alignment to a mouse reference genome using Minimap2. Mouse reference genome used is the GCRm39 genome from [Ensembl](https://ftp.ensembl.org/pub/release-113/fasta/mus_musculus/).
+I also used bioawk to generate as a text file of chromosomes that the sequence aligned by extractting the rname field.
+
+I also made sorted and indexed BAM files for IGV visuzalization.
+
+```
+cd ./FinalProject/data/raw/
+wget https://ftp.ensembl.org/pub/release-113/fasta/mus_musculus/dna/Mus_musculus.GRCm39.dna.primary_assembly.fa.gz
+
+cd ../../
+
+minimap -a data/raw/Mus_musculus.GRCm39.dna.primary_assembly.fa.gz data/raw/CD1aTLA.fasta.gz > CD1aTLA.sam
+
+### Chromosome list
+samtools sort data/processed/CD1aTLA.sam -o data/processed/sortedCD1aTLA.sam
+bioawk -c sam '{print $rname}' data/processed/sortedCD1aTLA.sam > data/processed/TLAchr.text
+### Vizualize files
+samtools view -Sb CD1aTLA.sam > CD1aTLA.bam
+samtools sort data/processed/CD1aTLA.bam -o data/processed/CD1aTLAsort.bam
+samtools index CD1aTLAsort.bam
+```
+## Results
+Files then were uploaded into IGV with a focus on chromosomes 1 and 10 based on the previsoly generated table.
+### For Chromosome 1 alignment.
+![fig3.1](https://github.com/jayalaanUCI/ee282/blob/FinalProject/FinalProject/output/figures/igv_snapshotchr1.png?raw=true)
+![Figure 3](https://github.com/jayalaanUCI/ee282/blob/FinalProject/FinalProject/output/figures/igv_snapshot.png?raw=true)
+![Figure 4](https://github.com/jayalaanUCI/ee282/blob/FinalProject/FinalProject/output/figures/igv_snapshot2.png?raw=true)
+![Fgure 5](https://github.com/jayalaanUCI/ee282/blob/FinalProject/FinalProject/output/figures/igv_snapshot3.png?raw=true)
+![Figure 6](https://github.com/jayalaanUCI/ee282/blob/FinalProject/FinalProject/output/figures/igv_snapshot4.png?raw=true)
+### For Chromosome 10
+![Figure 7](https://github.com/jayalaanUCI/ee282/blob/FinalProject/FinalProject/output/figures/igv_snapshot6.png?raw=true)
+![Figure 8](https://github.com/jayalaanUCI/ee282/blob/FinalProject/FinalProject/output/figures/igv_snapshot7.png?raw=true)
+![Figure 9](https://github.com/jayalaanUCI/ee282/blob/FinalProject/FinalProject/output/figures/igv_snapshot8.png?raw=true)
+
+### Table of chromosomes
+In R, usign ggplot2 I took the text file TLAchrt.txt and used the chromosome list to map. 
+```
+### in R
+>x <- read.table(TLAchr.txt)
+>q+geom_density(mapping=aes(x=V1), fill="#69b3a2", color="#e9ecef", alpha=0.8)+xlab("Chromosome"+ylab("Reads Mapped") ### where V1 is the chr column
+```
+
+
+
+
 
 
 
