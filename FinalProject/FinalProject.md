@@ -89,6 +89,10 @@ In R, usign ggplot2 I took the text file TLAchrt.txt and used the chromosome lis
 >x <- read.table(TLAchr.txt)
 >q+geom_density(mapping=aes(x=V1), fill="#69b3a2", color="#e9ecef", alpha=0.8)+xlab("Chromosome"+ylab("Reads Mapped") ### where V1 is the chr column
 ```
+##### Alignment chart from R
+![Rplot](https://github.com/jayalaanUCI/ee282/blob/FinalProject/FinalProject/output/figures/Rplot.png?raw=true)
+
+## Discussion
 
 
 
